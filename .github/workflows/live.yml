@@ -1,0 +1,32 @@
+# 盤中每 10 分鐘抓 TAIFEX MIS 即時買賣價，重算台指權 VIX 9D/1M/3M/6M 與 Cash VIX Oscillator。
+# GitHub 內建 cron 常延遲；準點請用 cron-job.org 呼叫 workflow_dispatch（見 README）。
+name: live-intraday
+on:
+  schedule:
+    - cron: '*/10 0-5 * * 1-5'   # 08:00–13:50 Asia/Taipei（腳本只在 08:44–14:15 內執行）
+    - cron: '8 6 * * 1-5'        # 14:08 收盤後最後一筆
+  workflow_dispatch:
+    inputs: { force: { description: "true=略過時段與休市檢查", default: "false" } }
+permissions: { contents: write }
+concurrency: { group: twb-data, cancel-in-progress: false }
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install numpy pandas requests
+      - name: 抓取、計算、提交（衝突自動重試）
+        env: { FORCE: "${{ github.event.inputs.force }}" }
+        run: |
+          git config user.name "twb-bot"; git config user.email "twb-bot@users.noreply.github.com"
+          for i in 1 2 3 4; do
+            python scripts/live_mis.py $([ "$FORCE" = "true" ] && echo --force) || exit 1
+            git add data/live.json data/live_today.json
+            if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+            git commit -q -m "live: $(TZ=Asia/Taipei date +%FT%R)"
+            if git push -q; then exit 0; fi
+            git fetch -q origin main && git reset -q --hard origin/main; sleep $((RANDOM % 5 + 2))
+          done; exit 1

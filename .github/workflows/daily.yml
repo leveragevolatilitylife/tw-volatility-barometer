@@ -1,0 +1,34 @@
+# 每個交易日收盤後同步資料：價格與 VX30 Roll Yield（Stock_data_collection）＋ 台指權 VIX 期限結構（tw-vix-term-structure）
+# 兩個來源 repo 為私人 repo，需要 secrets.DATA_TOKEN（fine-grained PAT，兩個 repo 的 Contents 讀取權限）。
+name: daily-sync
+on:
+  schedule:
+    - cron: '57 9 * * 1-5'     # 17:57 Asia/Taipei（tw-vix-term-structure 於 17:37 產出）
+    - cron: '57 11 * * 1-5'    # 19:57 備援
+  workflow_dispatch:
+permissions: { contents: write }
+concurrency: { group: twb-data, cancel-in-progress: false }
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { repository: leveragevolatilitylife/stock-data-collection, ref: data, path: src/sdc, token: "${{ secrets.DATA_TOKEN }}" }
+      - uses: actions/checkout@v4
+        with: { repository: leveragevolatilitylife/tw-vix-term-structure, ref: data, path: src/vts, token: "${{ secrets.DATA_TOKEN }}" }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm install --no-save --no-package-lock xlsx@0.18.5
+      - name: 解析價格與 Roll Yield
+        run: node scripts/parse-xlsx.mjs src/sdc/Stock_data_collection.xlsx data/market_data.json
+      - name: 台指權 VIX 期限結構
+        run: cp src/vts/vix_term.csv data/vix_term.csv
+      - name: 驗證並提交
+        run: |
+          node tests/test_core.mjs
+          git config user.name "twb-bot"; git config user.email "twb-bot@users.noreply.github.com"
+          git add data/market_data.json data/vix_term.csv
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -q -m "data: daily sync $(TZ=Asia/Taipei date +%F)"
+          for i in 1 2 3 4; do git push -q && exit 0; git fetch -q origin main && git rebase -q origin/main || true; sleep $((RANDOM % 5 + 2)); done; exit 1

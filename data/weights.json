@@ -1,0 +1,7 @@
+{
+  "lookback": 1000,
+  "minObs": 250,
+  "weights": { "VIX1M": 1, "VIX9D:VIX1M": 1, "VIX1M:VIX3M": 1, "VIX1M:VIX6M": 1, "CashVIXOsc": 1, "VX30RollYield": 1, "MA60Bias": 1 },
+  "note": "等權。2520 組權重×門檻試驗的 PBO=40%、walk-forward 輸給買進持有與等權，故不採最佳化權重（見 research/README.md）。",
+  "bands": { "calm": 0.5, "warm": 0.8, "hot": 0.9 }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>自動回測 · TW Volatility Barometer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css"></head><body><div class="wrap">
+<header class="site"><a class="brand" href="https://leveragevolatilitylife.github.io/" style="text-decoration:none"><span class="av">Y</span><span>Yung's Journey to FIRE</span></a>
+<div class="meta"><span>TWSE · TAIFEX · DAILY + INTRADAY</span><a href="https://www.instagram.com/leverage_volatility_life/">@leverage_volatility_life</a></div></header>
+<nav class="tabs"><a href="index.html" class="">即時溫度計</a><a href="backtest.html" class="on">自動回測</a><a href="https://github.com/leveragevolatilitylife/tw-volatility-barometer/blob/main/research/README.md">研究報告</a></nav>
+
+<div class="eyebrow">// AUTO BACKTEST</div>
+<h1>自動回測<small>Rotation Backtest in Browser</small></h1>
+<p class="sub" style="margin:10px 0 0">資料每日更新後，頁面載入即以最新資料重算。台指衍生指標落後一日（收盤後才算得出，隔日開盤進場），成交價為開盤價。</p>
+<div id="err" class="err"></div>
+<div class="grid g12">
+ <div class="card"><h2>設定</h2>
+  <label class="f">策略</label><select id="strat" style="width:100%"></select>
+  <div class="ctl">
+   <div><label class="f">多方標的</label><select id="bull"></select></div>
+   <div><label class="f">空方標的</label><select id="bear"></select></div>
+   <div><label class="f">起日</label><input type="date" id="start"></div>
+   <div><label class="f">迄日</label><input type="date" id="end"></div>
+   <div><label class="f">手續費 %</label><input type="number" id="fee" value="0.1425" step="0.01"></div>
+   <div><label class="f">證交稅 %</label><input type="number" id="tax" value="0.1" step="0.01"></div>
+  </div>
+  <div id="params"></div>
+  <div style="margin-top:12px;display:flex;gap:10px;align-items:center"><label class="f" style="margin:0"><input type="checkbox" id="log" checked> 對數座標</label><label class="f" style="margin:0"><input type="checkbox" id="cmp" checked> 疊加預設策略</label></div>
+ </div>
+ <div class="card"><h2>權益曲線（起點歸一）</h2><div id="eq"></div></div>
+</div>
+<div class="card"><h2>績效比較</h2><div style="overflow-x:auto"><table id="stats"></table></div><div class="note" id="statNote" style="margin-top:10px"></div></div>
+<div class="grid g2"><div class="card"><h2>回撤</h2><div id="dd"></div></div>
+<div class="card"><h2>溫度計權重研究結論</h2><div class="note" style="color:var(--text-secondary)">
+2016-07 至 2026-10（共同起點，2,494 日）測試 <b>2,520 組</b>（權重×門檻）：<br>• 僅 <b>3.7%</b> 的組合 Sharpe 高於買進持有 00631L；最佳 1.20 vs 買進持有 1.10（樣本內）。<br>• CSCV 過擬合機率 <b>PBO＝40%</b>；逐年 walk-forward（2019 起）Sharpe 1.02，<b>低於</b>買進持有 1.21 與等權溫度計 1.18。<br>• 結論：<b>不採最佳化權重，預設等權</b>。溫度計適合當「環境儀表」，作為單獨的進出場規則並無穩定優勢；現有 Roll Yield 規則的優勢來自其「極低分位轉多」等非單調規則。<br>• 反向閘門（壓力區用 Hybrid II、其餘用 Hybrid）walk-forward 小幅優於兩者，但安慰劑檢驗僅勝 81% 隨機組，列為待觀察。
+</div></div></div>
+<div class="card"><h2>換倉紀錄（目前策略，最近 30 筆）</h2><div style="overflow-x:auto"><table id="trades"></table></div></div>
+<script src="assets/bt-engine.js"></script><script src="assets/core.js"></script><script src="assets/common.js"></script><script src="assets/backtest.js"></script>
+<footer>本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具，不構成任何投資建議。資料來源：期交所 MIS 即時報價與每日行情、Stock_data_collection；台指權 VIX 為依 CBOE 公式自行編制，非官方數值。</footer></div>
+</body></html>
