@@ -19,7 +19,8 @@
 
 ## 測試
 ```
-node tests/test_core.mjs
+node tests/test_core.mjs          # 對照 2026-10-30 研究快照（資料更新後數值會變，僅供開發參考）
+node tests/check_data.mjs         # 資料健全性（CI 使用）
 python3 tests/test_live_offline.py
 ```
 研究方法與過擬合分析見 `research/README.md`。
