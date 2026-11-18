@@ -45,3 +45,32 @@ svg text{font-family:'JetBrains Mono',monospace;fill:var(--text-tertiary);font-s
 .legend{display:flex;gap:14px;flex-wrap:wrap;font:500 11px 'JetBrains Mono',monospace;color:var(--text-secondary);margin-top:8px}.legend i{display:inline-block;width:10px;height:3px;margin-right:6px;vertical-align:middle}
 footer{margin:40px 0 30px;padding-top:18px;border-top:1px solid var(--border-soft);color:var(--text-tertiary);font-size:12px}
 .err{color:var(--red);font:12px 'JetBrains Mono',monospace}
+
+/* ===== 對齊「美股即時波動率溫度計」的設計（風險色階、儀表、區塊標題） ===== */
+:root{--mono:'JetBrains Mono',ui-monospace,monospace}
+body{background:var(--bg);background-image:radial-gradient(900px 500px at 8% -5%,rgba(var(--accent-rgb),.07),transparent 70%),radial-gradient(800px 480px at 95% -5%,rgba(52,211,153,.04),transparent 70%);background-repeat:no-repeat;min-height:100vh}
+a{color:inherit}a:hover{text-decoration:none}
+.brand img{width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.25);object-fit:cover}
+.hr{display:flex;align-items:center;gap:18px;font:400 11.5px var(--mono);color:var(--text-tertiary)}.hr a:hover{color:var(--accent)}
+.crumb{display:inline-block;margin:26px 0 0;font:400 12px var(--mono);color:var(--text-tertiary)}.crumb:hover{color:var(--accent)}
+.crumb+nav.tabs{margin-top:10px}.eyebrow{letter-spacing:.08em;margin-top:22px}
+.card{transition:.2s}.card:hover{transform:translateY(-2px);border-color:rgba(var(--accent-rgb),.6)}
+.card.static:hover,.gauge-card:hover{transform:none;border-color:var(--border)}
+h3.sec{font:500 13px var(--mono);color:var(--accent);letter-spacing:.08em;margin:34px 0 12px}
+.gauge-card{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:28px;align-items:center;margin-top:22px}
+.tick{font:400 11.5px var(--mono);color:var(--text-tertiary)}
+.bigv{font:600 clamp(44px,9vw,72px)/1 var(--mono)}.state{font:400 12px var(--mono);color:var(--text-secondary);margin-top:8px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:14px}
+.kv div{border:1px solid var(--border-soft);border-radius:4px;padding:10px 12px;text-align:left}
+.kv small{display:block;font:400 10.5px var(--mono);color:var(--text-tertiary)}.kv b{font:500 16px var(--mono)}
+.grid3r{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:16px}
+.st .tick{margin-bottom:2px}.st h2{margin:4px 0 6px}
+.posv{font:700 26px var(--mono);text-shadow:0 0 14px currentColor;margin:4px 0}
+.desc{color:var(--text-secondary);font-size:13px}
+td.rk{color:#fff;text-shadow:0 0 2px rgba(0,0,0,.85);text-align:center;font-weight:600}
+.scale{display:flex;align-items:center;gap:8px;font:400 10.5px var(--mono);color:var(--text-tertiary);margin:6px 0}.scale span{display:flex}.scale b{width:22px;height:10px;display:block}
+tr:hover td{background:var(--bg-panel-hover)}
+.btn{font:400 12px var(--mono);color:var(--text-primary);background:var(--bg-panel);border:1px solid var(--border);border-radius:4px;padding:5px 12px;cursor:pointer}.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-panel)}
+.warnbox{font:400 11.5px var(--mono);color:var(--amber);background:var(--amber-dim);border-radius:4px;padding:8px 12px;margin-top:14px;display:none}
+@media(max-width:560px){.meta-date{display:none}}@media(max-width:380px){.handle{display:none}}
+@media(max-width:900px){.gauge-card{grid-template-columns:1fr}}
