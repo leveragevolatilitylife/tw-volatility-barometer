@@ -10,12 +10,12 @@
 <nav class="tabs"><a href="index.html" class="">即時溫度計</a><a href="backtest.html" class="on">自動回測</a><a href="https://github.com/leveragevolatilitylife/tw-volatility-barometer/blob/main/research/README.md">研究報告</a></nav>
 
 <div class="eyebrow">// AUTO BACKTEST</div>
-<h1>自動回測<small>Rotation Backtest in Browser</small></h1>
-<p class="sub" style="margin:10px 0 0">資料每日更新後，頁面載入即以最新資料重算。台指衍生指標落後一日（收盤後才算得出，隔日開盤進場），成交價為開盤價。</p>
+<h1>溫度計規則回測<small>Weights &amp; Intraday Timing Research</small></h1>
+<p class="sub" style="margin:10px 0 0">只回測溫度計規則（≥ t1 轉空方）。比較三種權重方案，以及三種成交時點：A 次日開盤、B 次日收盤、C 當日收盤前（以當日資料決策，歷史上用收盤台指權 VIX 代理 13:25 的盤中溫度計）。</p>
 <div id="err" class="err"></div>
 <div class="grid g12">
  <div class="card"><h2>設定</h2>
-  <label class="f">策略</label><select id="strat" style="width:100%"></select>
+  <label class="f">權重方案</label><select id="scheme" style="width:100%"></select><label class="f">成交時點</label><select id="timing" style="width:100%"></select>
   <div class="ctl">
    <div><label class="f">多方標的</label><select id="bull"></select></div>
    <div><label class="f">空方標的</label><select id="bear"></select></div>
@@ -25,15 +25,20 @@
    <div><label class="f">證交稅 %</label><input type="number" id="tax" value="0.1" step="0.01"></div>
   </div>
   <div id="params"></div>
-  <div style="margin-top:12px;display:flex;gap:10px;align-items:center"><label class="f" style="margin:0"><input type="checkbox" id="log" checked> 對數座標</label><label class="f" style="margin:0"><input type="checkbox" id="cmp" checked> 疊加預設策略</label></div>
+  <div style="margin-top:12px;display:flex;gap:10px;align-items:center"><label class="f" style="margin:0"><input type="checkbox" id="log" checked> 對數座標</label><label class="f" style="margin:0"><input type="checkbox" id="cmp" checked> 疊加其他成交時點</label></div>
  </div>
  <div class="card"><h2>權益曲線（起點歸一）</h2><div id="eq"></div></div>
 </div>
 <div class="card"><h2>績效比較</h2><div style="overflow-x:auto"><table id="stats"></table></div><div class="note" id="statNote" style="margin-top:10px"></div></div>
 <div class="grid g2"><div class="card"><h2>回撤</h2><div id="dd"></div></div>
-<div class="card"><h2>溫度計權重研究結論</h2><div class="note" style="color:var(--text-secondary)">
-2016-07 至 2026-10（共同起點，2,494 日）測試 <b>2,520 組</b>（權重×門檻）：<br>• 僅 <b>3.7%</b> 的組合 Sharpe 高於買進持有 00631L；最佳 1.20 vs 買進持有 1.10（樣本內）。<br>• CSCV 過擬合機率 <b>PBO＝40%</b>；逐年 walk-forward（2019 起）Sharpe 1.02，<b>低於</b>買進持有 1.21 與等權溫度計 1.18。<br>• 結論：<b>不採最佳化權重，預設等權</b>。溫度計適合當「環境儀表」，作為單獨的進出場規則並無穩定優勢；現有 Roll Yield 規則的優勢來自其「極低分位轉多」等非單調規則。<br>• 反向閘門（壓力區用 Hybrid II、其餘用 Hybrid）walk-forward 小幅優於兩者，但安慰劑檢驗僅勝 81% 隨機組，列為待觀察。
+<div class="card"><h2>研究結論（權重 × 成交時點）</h2><div class="note" style="color:var(--text-secondary)">
+2016-02 至 2026-11（共同區間 2,622 日）、門檻 θ＝0.8／0.85／0.9、含成本：<br>
+• <b>權重</b>：排名加權（每年用過去資料依預測力排名、套美股分級權重）與極端加權（依當日分位動態加權）<b>沒有穩定優於等權</b>。排名加權換倉大增（θ0.85：249 次 vs 117 次），後段（2021 起）Sharpe 0.61 vs 等權 0.78；極端加權僅在單一門檻（θ0.9）好看，θ0.8 明顯退化，屬於門檻依賴。<br>
+• <b>成交時點</b>：等權 θ0.85 下，次日開盤 Sharpe 0.93，次日收盤 1.02，當日收盤前（用當日資料）1.03。<b>差距主要來自「晚一點、少吃開盤跳空」，而非資訊更新</b>（B 與 C 幾乎相同）。θ0.8 時 C 反而較差，因此盤中擇時的優勢尚不穩健。<br>
+• <b>時段報酬</b>：溫度計在 50–80「升溫」帶，隔夜 +22 bp、日內 −7 bp；80–90「高壓」帶隔夜與日內皆為負。風險多在盤中釋放，但隔夜／日內互換需每日來回，成本遠高於 22 bp，無法直接操作。<br>
+• 結論：預設仍採<b>等權</b>；真正的盤中擇時需要歷史盤中台指權資料，需從現在起每日累積後再做。所有方案相對買進持有 00631L（Sharpe 1.02）皆無穩定超額。
 </div></div></div>
+<div class="card"><h2>時段報酬分解（隔夜 vs 日內）</h2><div style="overflow-x:auto"><table id="decomp"></table></div><div class="note" style="margin-top:10px">用等權溫度計（前一日資料）分帶；bp＝0.01%。極端帶樣本極少，僅供參考。</div></div>
 <div class="card"><h2>換倉紀錄（目前策略，最近 30 筆）</h2><div style="overflow-x:auto"><table id="trades"></table></div></div>
 <script src="assets/bt-engine.js"></script><script src="assets/core.js"></script><script src="assets/common.js"></script><script src="assets/backtest.js"></script>
 <footer>本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具，不構成任何投資建議。資料來源：期交所 MIS 即時報價與每日行情、Stock_data_collection；台指權 VIX 為依 CBOE 公式自行編制，非官方數值。</footer></div>

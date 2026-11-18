@@ -83,7 +83,60 @@ function liveBarometer(histInd, cur, w, L) {
   });
   return { b: den > 0 ? num / den : NaN, cov: tot > 0 ? den / tot : 0, rows: rows };
 }
-var api = { IND: IND, BANDS: BANDS, band: band, nz: nz, lag: lag, ma60bias: ma60bias, buildIndicators: buildIndicators, pctOf: pctOf, pctSeries: pctSeries,
+/* ===== 依「各指標歷史分位」調整權重（參考美股溫度計：權重按排名分級） ===== */
+/* 美股溫度計權重由大到小：0.2597, 0.1787, 0.1787, 0.0618, 0.0357…；這裡取前 7 級（排名第 1 的指標拿最大權重），並正規化。 */
+var TIERS = [0.2597, 0.1787, 0.1787, 0.0618, 0.0357, 0.0357, 0.0357];
+function combineW(R, Wm) {
+  var n = R[0].length, b = new Array(n).fill(NaN), cov = new Array(n).fill(0);
+  for (var i = 0; i < n; i++) {
+    var w = Wm[i], num = 0, den = 0, tot = 0; if (!w) continue;
+    for (var k = 0; k < R.length; k++) { tot += w[k]; if (!isNaN(R[k][i]) && w[k] > 0) { num += w[k] * R[k][i]; den += w[k]; } }
+    if (den > 0) { b[i] = num / den; cov[i] = den / tot; }
+  }
+  return { b: b, cov: cov };
+}
+/* 極端加權：每天依各指標「目前歷史分位」距 50% 的距離加權（越極端權重越大；floor 避免全部為 0）。無需擬合。 */
+function weightsExtreme(R, floor) {
+  floor = floor == null ? 0.05 : floor; var n = R[0].length, W = new Array(n);
+  for (var i = 0; i < n; i++) W[i] = R.map(function (r) { return isNaN(r[i]) ? 0 : Math.abs(r[i] - 0.5) + floor; });
+  return W;
+}
+/* 排名加權（walk-forward）：每年初，用「過去」資料估各指標的預測品質 q = −corr(風險分位, 標的當日報酬)，
+   依 q 由高到低套用 TIERS 權重；樣本 < minObs 時退回等權。ret[i]＝以 R[i] 決策所賺到的標的報酬。dates 用來判斷換年。 */
+function weightsRankWF(R, ret, dates, minObs) {
+  minObs = minObs || 500; var n = R[0].length, W = new Array(n), cur = null, y0 = '';
+  for (var i = 0; i < n; i++) {
+    var y = dates[i].slice(0, 4);
+    if (y !== y0) {
+      y0 = y; var q = R.map(function (r) {
+        var c = 0, sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0;
+        for (var j = 0; j < i; j++) { var a = r[j], b = ret[j]; if (isNaN(a) || b == null || isNaN(b)) continue; c++; sx += a; sy += b; sxx += a * a; syy += b * b; sxy += a * b; }
+        if (c < minObs) return null; var cv = sxy / c - (sx / c) * (sy / c), vx = sxx / c - (sx / c) * (sx / c), vy = syy / c - (sy / c) * (sy / c);
+        return vx > 0 && vy > 0 ? -cv / Math.sqrt(vx * vy) : 0;
+      });
+      if (q.some(function (v) { return v == null; })) cur = R.map(function () { return 1; });
+      else { var order = q.map(function (v, k) { return k; }).sort(function (a, b) { return q[b] - q[a]; }); cur = new Array(R.length); order.forEach(function (k, rank) { cur[k] = TIERS[rank]; }); }
+    }
+    W[i] = cur;
+  }
+  return W;
+}
+function schemeWeights(scheme, R, ret, dates) {
+  if (scheme === 'extreme') return weightsExtreme(R);
+  if (scheme === 'rank') return weightsRankWF(R, ret, dates);
+  var w = R.map(function () { return 1; }); return R[0].map(function () { return w; });
+}
+/* 收盤成交版回測：signal[i] 在第 i 日收盤成交，持有第 i+1 日（收盤對收盤）。回傳 {equity, applied, trades}。 */
+function runCloseExec(ds, signal, bull, bear, cost) {
+  var n = ds.n, cr = (cost && cost.commissionRate || 0) / 100, tr = (cost && cost.taxRate || 0) / 100, eq = new Array(n).fill(1), ap = new Array(n).fill('CASH'), trades = 0;
+  for (var i = 1; i < n; i++) {
+    var s = signal[i - 1], need = s == null ? 'CASH' : (s === 'BULL' ? bull : bear), prev = ap[i - 1], e = eq[i - 1];
+    if (need !== prev) { e *= 1 - (prev === 'CASH' ? 0 : cr + tr) - (need === 'CASH' ? 0 : cr); trades++; }
+    eq[i] = e * (1 + (need === 'CASH' ? 0 : ds.returns[need][i])); ap[i] = need;
+  }
+  return { equity: eq, appliedAsset: ap, trades: trades, tradeList: [] };
+}
+var api = { TIERS: TIERS, combineW: combineW, weightsExtreme: weightsExtreme, weightsRankWF: weightsRankWF, schemeWeights: schemeWeights, runCloseExec: runCloseExec, IND: IND, BANDS: BANDS, band: band, nz: nz, lag: lag, ma60bias: ma60bias, buildIndicators: buildIndicators, pctOf: pctOf, pctSeries: pctSeries,
   riskSeries: riskSeries, combine: combine, signal3: signal3, liveBarometer: liveBarometer };
 if (typeof module !== 'undefined') module.exports = api; else root.TWB = api;
 })(typeof window !== 'undefined' ? window : this);

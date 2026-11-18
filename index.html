@@ -25,9 +25,9 @@
  <div class="card static"><div class="tick" style="margin-bottom:6px">今日盤中走勢（台指權）</div><div id="today"></div><div id="spot" class="note" style="margin-top:8px"></div></div>
 </div>
 
-<h3 class="sec">// 策略訊號 · 依資料最後一個交易日</h3>
+<h3 class="sec">// 溫度計規則 · 唯一保留的策略</h3>
 <div class="grid3r" id="strats"></div>
-<p class="desc" style="margin-top:10px">Roll Yield／Hybrid／Hybrid II／反向閘門沿用 TWN-rotation-strategy-backtester 的規則與參數；溫度計規則＝溫度計 ≥ 0.85 轉空方。這些是規則輸出，<b>不是投資建議</b>；研究顯示溫度計本身在 2016–2026 並未勝過買進持有 00631L（見研究報告），較適合當環境儀表。</p>
+<p class="desc" style="margin-top:10px">規則：溫度計 ≥ 85% 轉空方（00635U），其餘多方（00631L）。這是規則輸出，<b>不是投資建議</b>；與 TWN-Stocks-Rotation-Strategy 的策略不重複，Roll Yield 只作為溫度計的指標之一。權重方案與盤中成交時點的研究見「自動回測」頁。</p>
 
 <h3 class="sec">// 每日溫度計走勢 · 近一年（點色＝風險色階）</h3>
 <div class="card static" style="padding:14px"><div id="hist"></div><div class="legend" style="margin-top:6px">橫虛線：50% 平靜／升溫、80% 升溫／高壓、90% 高壓／極端。數值為「當日開盤可用」的溫度計（台指衍生指標落後一日）。</div></div>

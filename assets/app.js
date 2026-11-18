@@ -72,19 +72,15 @@ function build(D) {
   if (pts.length) TWC.lineChart($('today'), pts.map(function (p) { return p.t; }), [{ name: 'VIX9D', color: '#c9805f', y: pts.map(function (p) { return p.VIX9D; }) }, { name: 'VIX1M', color: '#c9a688', y: pts.map(function (p) { return p.VIX1M; }) }, { name: 'VIX3M', color: '#6d8fb3', y: pts.map(function (p) { return p.VIX3M; }) }], { height: 200, xlen: 5, yfmt: function (v) { return v.toFixed(1); } });
   else $('today').innerHTML = '<div class="note">今日尚無盤中資料（休市或尚未開盤；盤中每 10 分鐘更新）。</div>';
   if (D.live && D.live.spot && D.live.spot.last) $('spot').textContent = '台指現貨 ' + F.n(D.live.spot.last, 0) + '（日內 ' + F.n(D.live.spot.low, 0) + ' – ' + F.n(D.live.spot.high, 0) + '；前收 ' + F.n(D.live.spot.ref, 0) + '）。來源：' + D.live.source;
-  // signals（回測規則的最新輸出）
-  var ds = BT.buildDataset(mk), n = ds.n, last = n - 1;
-  var ryS = BT.computeVixSignal(ds.rollYield, 1000, 'advanced', 28, 1, 0.5), maS = BT.computeMASignal(ds.prices[ds.anchor], ds.opens[ds.anchor] || ds.prices[ds.anchor], 60, 20, 'open');
-  var hy = BT.combineSignals(maS, ryS, 'HOLD'), hy2 = BT.combineSignals(maS, ryS, 'OR');
-  var ind = TWB.buildIndicators(mk, D.term, { lag: true }), R = TWB.riskSeries(ind, 1000), B = TWB.combine(R, w).b;
-  var oscP = TWB.pctSeries(ind.CashVIXOsc, 1000).map(function (p) { return p * 100; });
-  var gate = hy.map(function (_, i) { return isNaN(oscP[i]) || hy[i] == null || hy2[i] == null ? null : (oscP[i] < 30 ? hy2[i] : hy[i]); });
-  var tb = TWB.signal3(B, 0.85, 1.01), defs = [['VX30 Roll Yield 輪動', ryS, 'RULE · 28 / 1 / 0.5'], ['Hybrid', hy, '60MA + Roll Yield · 分歧不輪動'], ['Hybrid II', hy2, '60MA + Roll Yield · OR'], ['反向閘門', gate, 'Osc 百分位 &lt;30 用 II，其餘 Hybrid'], ['溫度計規則', tb, '溫度計 ≥ 0.85 轉空']];
-  var cards = '';
-  defs.forEach(function (d) { var sg = d[1], i = last; while (i >= 0 && sg[i] == null) i--; var cur2 = sg[i], run = 1; for (var j = i - 1; j >= 0 && sg[j] === cur2; j--) run++;
-    var col = cur2 === 'BULL' ? riskRgb(.15) : cur2 === 'BEAR' ? riskRgb(.92) : null, hold = cur2 === 'BULL' ? '00631L' : cur2 === 'BEAR' ? '00635U' : '—';
-    cards += '<div class="card st static"><div class="tick">' + d[2] + '</div><h2>' + d[0] + '</h2><div class="posv" style="color:' + (col ? 'rgb(' + col.join(',') + ')' : '#8a97a6') + '">' + hold + '</div><div class="desc">' + (cur2 ? (cur2 === 'BULL' ? '多方' : '空方') + '訊號，已持續 ' + run + ' 個交易日' : '資料不足') + '</div></div>'; });
-  $('strats').innerHTML = cards;
+  // 溫度計規則（唯一保留的策略）：溫度計 ≥ 0.85 轉空方（00635U），否則多方（00631L）
+  var ds = BT.buildDataset(mk), last = ds.n - 1, TH = 0.85;
+  var ind = TWB.buildIndicators(mk, D.term, { lag: true }), R = TWB.riskSeries(ind, 1000), B = TWB.combine(R, w).b, tb = TWB.signal3(B, TH, 1.01);
+  var li2 = last; while (li2 >= 0 && tb[li2] == null) li2--; var run = 1; for (var j = li2 - 1; j >= 0 && tb[j] === tb[li2]; j--) run++;
+  function card(tick, title, sg, desc) { var col = sg === 'BULL' ? riskRgb(.15) : sg === 'BEAR' ? riskRgb(.92) : null;
+    return '<div class="card st static"><div class="tick">' + tick + '</div><h2>' + title + '</h2><div class="posv" style="color:' + (col ? 'rgb(' + col.join(',') + ')' : '#8a97a6') + '">' + (sg === 'BULL' ? '00631L' : sg === 'BEAR' ? '00635U' : '—') + '</div><div class="desc">' + desc + '</div></div>'; }
+  var liveSig = isNaN(res.b) ? null : (res.b >= TH ? 'BEAR' : 'BULL');
+  $('strats').innerHTML = card('RULE · 溫度計 ≥ ' + Math.round(TH * 100) + '% 轉空', '目前溫度計 ' + (isNaN(res.b) ? '--' : Math.round(res.b * 100) + '%'), liveSig, (isLive ? '盤中即時' : '以最近收盤') + (liveSig ? (liveSig === 'BEAR' ? '：空方（持有反向 00635U）' : '：多方（持有 00631L）') : '')) +
+    card('RULE · 資料最後交易日 ' + mk.dates[last].slice(5), '回測口徑訊號', tb[li2], tb[li2] ? (tb[li2] === 'BULL' ? '多方' : '空方') + '，已持續 ' + run + ' 個交易日（台指衍生指標落後一日）' : '資料不足');
   var hn = 250, hs = Math.max(0, last - hn + 1), hx = [], hy = []; for (var q2 = hs; q2 <= last; q2++) if (!isNaN(B[q2])) { hx.push(mk.dates[q2].slice(5)); hy.push(B[q2]); }
   TWC.riskLine($('hist'), hx, hy, { height: 220 });
 }

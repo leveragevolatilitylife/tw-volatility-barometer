@@ -1,0 +1,45 @@
+共同區間 2016-02-02 ~ 2026-11-18 ( 2622 日)
+買進持有 00631L 全期  40.5% Sh1.02 DD -55% | 前段  41.7% Sh1.22 DD -52% | 後段  38.7% Sh0.92 DD -55%
+equal    open    θ0.8 全期  29.4% Sh0.86 DD -50% | 前段(~2020)  36.2% Sh1.16 DD -47% | 後段(2021~)  23.2% Sh0.68 DD -50% 換倉 210
+equal    open    θ0.85 全期  34.5% Sh0.93 DD -60% | 前段(~2020)  39.8% Sh1.21 DD -38% | 後段(2021~)  29.5% Sh0.78 DD -60% 換倉 117
+equal    open    θ0.9 全期  35.9% Sh0.95 DD -59% | 前段(~2020)  34.8% Sh1.07 DD -52% | 後段(2021~)  36.1% Sh0.88 DD -59% 換倉 79
+equal    close1  θ0.8 全期  31.0% Sh0.91 DD -52% | 前段(~2020)  36.6% Sh1.18 DD -43% | 後段(2021~)  25.9% Sh0.75 DD -52% 換倉 210
+equal    close1  θ0.85 全期  38.4% Sh1.02 DD -56% | 前段(~2020)  41.7% Sh1.25 DD -43% | 後段(2021~)  35.0% Sh0.89 DD -56% 換倉 117
+equal    close1  θ0.9 全期  37.8% Sh0.98 DD -59% | 前段(~2020)  38.8% Sh1.16 DD -52% | 後段(2021~)  36.3% Sh0.89 DD -59% 換倉 79
+equal    close0  θ0.8 全期  25.3% Sh0.78 DD -50% | 前段(~2020)  25.3% Sh0.87 DD -44% | 後段(2021~)  24.6% Sh0.72 DD -50% 換倉 226
+equal    close0  θ0.85 全期  38.8% Sh1.03 DD -53% | 前段(~2020)  42.8% Sh1.29 DD -44% | 後段(2021~)  34.7% Sh0.89 DD -53% 換倉 123
+equal    close0  θ0.9 全期  37.1% Sh0.97 DD -58% | 前段(~2020)  34.6% Sh1.07 DD -52% | 後段(2021~)  38.5% Sh0.93 DD -58% 換倉 80
+rank     open    θ0.8 全期  26.0% Sh0.80 DD -62% | 前段(~2020)  42.5% Sh1.43 DD -31% | 後段(2021~)  13.0% Sh0.47 DD -62% 換倉 305
+rank     open    θ0.85 全期  28.5% Sh0.84 DD -62% | 前段(~2020)  38.8% Sh1.26 DD -28% | 後段(2021~)  19.8% Sh0.61 DD -62% 換倉 249
+rank     open    θ0.9 全期  30.7% Sh0.87 DD -62% | 前段(~2020)  42.2% Sh1.28 DD -33% | 後段(2021~)  21.1% Sh0.63 DD -62% 換倉 235
+rank     close1  θ0.8 全期  35.7% Sh0.98 DD -59% | 前段(~2020)  38.9% Sh1.21 DD -52% | 後段(2021~)  32.3% Sh0.85 DD -59% 換倉 225
+rank     close1  θ0.85 全期  32.8% Sh0.90 DD -57% | 前段(~2020)  38.6% Sh1.16 DD -52% | 後段(2021~)  27.4% Sh0.74 DD -57% 換倉 183
+rank     close1  θ0.9 全期  37.1% Sh0.98 DD -56% | 前段(~2020)  39.0% Sh1.17 DD -52% | 後段(2021~)  34.8% Sh0.87 DD -56% 換倉 169
+rank     close0  θ0.8 全期  28.3% Sh0.85 DD -60% | 前段(~2020)  33.7% Sh1.17 DD -44% | 後段(2021~)  23.2% Sh0.69 DD -60% 換倉 324
+rank     close0  θ0.85 全期  34.2% Sh0.97 DD -62% | 前段(~2020)  45.7% Sh1.46 DD -34% | 後段(2021~)  24.6% Sh0.71 DD -62% 換倉 262
+rank     close0  θ0.9 全期  36.9% Sh1.00 DD -57% | 前段(~2020)  45.0% Sh1.35 DD -33% | 後段(2021~)  29.7% Sh0.80 DD -57% 換倉 232
+extreme  open    θ0.8 全期  19.5% Sh0.65 DD -55% | 前段(~2020)  30.3% Sh1.01 DD -47% | 後段(2021~)  10.6% Sh0.42 DD -55% 換倉 483
+extreme  open    θ0.85 全期  32.2% Sh0.90 DD -54% | 前段(~2020)  43.5% Sh1.30 DD -46% | 後段(2021~)  22.8% Sh0.67 DD -54% 換倉 335
+extreme  open    θ0.9 全期  35.5% Sh0.95 DD -55% | 前段(~2020)  36.9% Sh1.11 DD -52% | 後段(2021~)  33.6% Sh0.86 DD -55% 換倉 203
+extreme  close1  θ0.8 全期  25.6% Sh0.80 DD -54% | 前段(~2020)  35.3% Sh1.16 DD -45% | 後段(2021~)  17.3% Sh0.57 DD -54% 換倉 483
+extreme  close1  θ0.85 全期  38.6% Sh1.04 DD -55% | 前段(~2020)  47.5% Sh1.40 DD -43% | 後段(2021~)  30.9% Sh0.83 DD -55% 換倉 335
+extreme  close1  θ0.9 全期  44.0% Sh1.11 DD -55% | 前段(~2020)  42.5% Sh1.24 DD -52% | 後段(2021~)  44.5% Sh1.04 DD -55% 換倉 203
+extreme  close0  θ0.8 全期  23.3% Sh0.76 DD -53% | 前段(~2020)  28.5% Sh0.97 DD -45% | 後段(2021~)  18.5% Sh0.61 DD -53% 換倉 509
+extreme  close0  θ0.85 全期  33.0% Sh0.93 DD -53% | 前段(~2020)  39.1% Sh1.20 DD -45% | 後段(2021~)  27.3% Sh0.76 DD -53% 換倉 347
+extreme  close0  θ0.9 全期  39.6% Sh1.02 DD -56% | 前段(~2020)  39.7% Sh1.18 DD -52% | 後段(2021~)  38.9% Sh0.93 DD -56% 換倉 189
+rankW 2017 VIX1M:127 VIX9D:VIX1M:127 VIX1M:VIX3M:127 VIX1M:VIX6M:127 CashVIXOsc:127 VX30RollYield:127 MA60Bias:127
+rankW 2018 VIX1M:127 VIX9D:VIX1M:127 VIX1M:VIX3M:127 VIX1M:VIX6M:127 CashVIXOsc:127 VX30RollYield:127 MA60Bias:127
+rankW 2019 VIX1M:127 VIX9D:VIX1M:127 VIX1M:VIX3M:127 VIX1M:VIX6M:127 CashVIXOsc:127 VX30RollYield:127 MA60Bias:127
+rankW 2020 VIX1M:5 VIX9D:VIX1M:5 VIX1M:VIX3M:23 VIX1M:VIX6M:23 CashVIXOsc:5 VX30RollYield:33 MA60Bias:8
+rankW 2021 VIX1M:5 VIX9D:VIX1M:23 VIX1M:VIX3M:8 VIX1M:VIX6M:5 CashVIXOsc:23 VX30RollYield:33 MA60Bias:5
+rankW 2022 VIX1M:5 VIX9D:VIX1M:23 VIX1M:VIX3M:8 VIX1M:VIX6M:5 CashVIXOsc:23 VX30RollYield:33 MA60Bias:5
+rankW 2023 VIX1M:5 VIX9D:VIX1M:23 VIX1M:VIX3M:8 VIX1M:VIX6M:5 CashVIXOsc:5 VX30RollYield:33 MA60Bias:23
+rankW 2024 VIX1M:5 VIX9D:VIX1M:23 VIX1M:VIX3M:23 VIX1M:VIX6M:5 CashVIXOsc:8 VX30RollYield:33 MA60Bias:5
+rankW 2025 VIX1M:8 VIX9D:VIX1M:5 VIX1M:VIX3M:23 VIX1M:VIX6M:5 CashVIXOsc:5 VX30RollYield:33 MA60Bias:23
+rankW 2026 VIX1M:5 VIX9D:VIX1M:5 VIX1M:VIX3M:23 VIX1M:VIX6M:8 CashVIXOsc:5 VX30RollYield:33 MA60Bias:23
+
+時段報酬分解（訊號=前一日資料的溫度計；平均 bp / 日；樣本 i0 起）
+平靜<50      N 1097 隔夜 13.5 bp 日內 8.8 bp
+升溫50-80    N 1267 隔夜 22.1 bp 日內 -6.8 bp
+高壓80-90    N 179 隔夜 -0.4 bp 日內 -11.5 bp
+極端≥90      N 16 隔夜 49.2 bp 日內 53.9 bp
